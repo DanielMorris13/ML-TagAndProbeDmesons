@@ -31,7 +31,7 @@ def ML_DMesons ():
     vars_to_draw = inputCfg['Output']['plotLabels']
     leg_labels = inputCfg['Output']['legLabels']
     
-    plot_utils.plot_distr(hdl_all, vars_to_draw, bins=250, labels=leg_labels, log=False, density=True, figsize=(12, 7), alpha=0.3, grid=False)
+    plot_utils.plot_distr(hdl_all, vars_to_draw, bins=100, labels=leg_labels, log=True, density=True, figsize=(12, 7), alpha=0.3, grid=False)
     plt.subplots_adjust(left=0.06, bottom=0.06, right=0.99, top=0.96, hspace=0.55, wspace=0.55)
     plt.show()
     plt.savefig(inputCfg['Output']['dir']+'TopoVars.pdf')
