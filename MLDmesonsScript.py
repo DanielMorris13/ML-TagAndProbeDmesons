@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import shap
 import yaml
 import argparse
-import xgboost as xgb # gradient boosting
+import xgboost as xgb 
 from hipe4ml.model_handler import ModelHandler
 from hipe4ml.tree_handler import TreeHandler
 from hipe4ml import plot_utils
