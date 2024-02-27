@@ -29,7 +29,7 @@ def ML_DMesons ():
     hdl_all = [hdl_kaka_data_bkg, hdl_kaka_mc_signal]
     
     vars_to_draw = inputCfg['Output']['plotLabels']
-    leg_labels = ["Data Bkg", "Mc Signal"]
+    leg_labels = inputCfg['Output']['legLabels']
     
     plot_utils.plot_distr(hdl_all, vars_to_draw, bins=250, labels=leg_labels, log=False, density=True, figsize=(12, 7), alpha=0.3, grid=False)
     plt.subplots_adjust(left=0.06, bottom=0.06, right=0.99, top=0.96, hspace=0.55, wspace=0.55)

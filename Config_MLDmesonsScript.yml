@@ -1,12 +1,14 @@
 input: # files to use
     mcKaKa: /home/dmorris/Data/AO2D_pp_LHC22b1b_run302027_KaKaFromDsOrDplus_Mc_merged.root
+    mcKaPi: /home/dmorris/Data/AO2D_pp_LHC22b1b_run302027_KaPiFromDstar_Mc_merged.root
+    mcPiPi: /home/dmorris/Data/AO2D_pp_LHC22b1b_run302027_PiPiFromDplus_Mc_merged.root
     dataKaKa: /home/dmorris/Data/AO2D_pp_DATA_LHC22q_pass4_lowIR_run528991_KaKaFromDsOrDplus_Data_merged.root
+    dataKaPi: /home/dmorris/Data/AO2D_pp_DATA_LHC22q_pass4_lowIR_run528991_KaPiFromDstar_Data_merged.root
+    dataPiPi: /home/dmorris/Data/AO2D_pp_DATA_LHC22q_pass4_lowIR_run528991_PiPiFromDplus_Data_merged.root
     treename: O2topovars
 
 Output:
-    legLabels:
-      Signal: Signal $Phi$rightarrow K^$pm K^$mp
-      Bkg: Background X $rightarrow K^$pm K^$mp
+    legLabels: ['Signal $\Phi$ $\rightarrow$ $K^\pm$ $K^\mp$', 'Background X $\rightarrow$ $K^\pm$ $K^\mp$']
     dir: '/home/dmorris/ML-TagAndProbeDmesons/outputs/'
     plotLabels: ['fTagsInvMass', 'fDecayLength', 'fDecayLengthXY', 'fDecayLengthNormalised', 'fTrackDcaXY', 'fCpa', 'fCpaXY']
 
