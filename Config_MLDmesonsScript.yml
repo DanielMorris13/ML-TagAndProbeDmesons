@@ -1,0 +1,27 @@
+input: # files to use
+    mcKaKa: /home/dmorris/Data/AO2D_pp_LHC22b1b_run302027_KaKaFromDsOrDplus_Mc_merged.root
+    dataKaKa: /home/dmorris/Data/AO2D_pp_DATA_LHC22q_pass4_lowIR_run528991_KaKaFromDsOrDplus_Data_merged.root
+    treename: O2topovars
+
+Output:
+    legLabels:
+      Signal: Signal $Phi$rightarrow K^$pm K^$mp
+      Bkg: Background X $rightarrow K^$pm K^$mp
+    dir: '/home/dmorris/ML-TagAndProbeDmesons/outputs/'
+    plotLabels: ['fTagsInvMass', 'fDecayLength', 'fDecayLengthXY', 'fDecayLengthNormalised', 'fTrackDcaXY', 'fCpa', 'fCpaXY']
+
+dataPrep:
+    Signal: fIsSignal == 1
+    Bkg: fIsSignal == 0 
+    filt_bkg_TagsInvMass: fTagsInvMass < 1 or fTagsInvMass > 1.05
+    index: [0, 1]
+    test_fraction: 1.  
+
+ml: 
+    training_vars: ['fDecayLength', 'fDecayLengthXY', 'fDecayLengthNormalised', 'fTrackDcaXY', 'fCpa', 'fCpaXY']
+    modelHdl: /home/dmorris/ML-TagAndProbeDmesons/outputs/ModelHandler_model.pickle
+    modelOriginal: /home/dmorris/ML-TagAndProbeDmesons/outputs/XGBoos_model.pickle
+    modelonnx: /home/dmorris/ML-TagAndProbeDmesons/outputs/model_onnx.onnx
+
+
+
