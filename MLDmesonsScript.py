@@ -2,7 +2,11 @@ import matplotlib.pyplot as plt
 import shap
 import yaml
 import argparse
+import pickle
 import xgboost as xgb 
+import optuna as op
+import plotly
+
 from hipe4ml.model_handler import ModelHandler
 from hipe4ml.tree_handler import TreeHandler
 from hipe4ml import plot_utils
@@ -53,7 +57,15 @@ def ML_DMesons ():
     model_clf = xgb.XGBClassifier() 
     model_hdl = ModelHandler(model_clf, features_for_train, model_params)
 
+    #Optimization of the model parameters
+    hyper_pars_ranges = {"max_depth": (2, 4), "learning_rate": (0.01, 0.1), "n_estimators": (200, 1000)}
+    model_hdl.optimize_params_optuna(train_test_data, hyper_pars_ranges, cross_val_scoring="roc_auc_ovo", n_trials=10, direction="maximize", save_study=inputCfg['Output']['dir']+'optuna_study.pkl')
+    opstudy = pickle.load(open( inputCfg['Output']['dir']+"optuna_study.pkl", "rb")) # load the study
+    plot_opstudy = op.visualization.plot_contour(opstudy)
+    plt.savefig(inputCfg['Output']['dir']+'Optuna_parametersImp.pdf')
+
     # Training and testing the model
+    model_hdl.set_model_params(opstudy.best_params) #feed the model with the best paramteres obtained with optuna
     model_hdl.train_test_model(train_test_data, multi_class_opt="ovo")
     y_pred_train = model_hdl.predict(train_test_data[0], False)
     y_pred_test = model_hdl.predict(train_test_data[2], False)
@@ -68,13 +80,9 @@ def ML_DMesons ():
     plot_utils.plot_roc(ytrain, y_pred_train, multi_class_opt="ovo")
     plt.savefig(inputCfg['Output']['dir']+'ROC_trainSet.pdf')
     
-    plot_utils.plot_feature_imp(train_test_data[2], train_test_data[3], model_hdl) 
-    plt.savefig(inputCfg['Output']['dir']+'ROC_featureImp.pdf')
-
-    #explainer = shap.Explainer(model_clf)
-    #shap_values = explainer(hdl_k)
-    #shap.plots.waterfall(shap_values[0])
-    #plt.savefig('/home/dmorris/ML-TagAndProbeDmesons/outputs/Shap_ROC_featureImp.pdf')
+    plots_shap = plot_utils.plot_feature_imp(train_test_data[2], train_test_data[3], model_hdl, inputCfg['Output']['legLabels'])
+    for i in range(0,len(plots_shap)):
+        plots_shap[i].savefig(inputCfg['Output']['dir']+'shapPlots/'+'featureImp_'+str(i)+'.pdf')
     
     model_hdl.dump_model_handler(inputCfg['ml']['modelHdl'])
     model_hdl.dump_original_model(inputCfg['ml']['modelOriginal'])
