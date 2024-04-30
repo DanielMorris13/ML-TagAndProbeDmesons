@@ -1,0 +1,42 @@
+input: # files to use
+    mcKaKa: /home/dmorris/Data/AO2D_LHC22b1b_train171188_merged.root
+    mcKaPi: /home/dmorris/Data/AO2D_pp_LHC22b1b_run302027_KaPiFromDstar_Mc_merged.root
+    mcPiPi: /home/dmorris/Data/AO2D_pp_LHC22b1b_run302027_PiPiFromDplus_Mc_merged.root
+    dataKaKa: /home/dmorris/Data/AO2D_LHC22o_apass4_minbias_small_train171422_merged.root
+    dataKaPi: /home/dmorris/Data/AO2D_pp_DATA_LHC22q_pass4_lowIR_run528991_KaPiFromDstar_Data_merged.root
+    dataPiPi: /home/dmorris/Data/AO2D_pp_DATA_LHC22q_pass4_lowIR_run528991_PiPiFromDplus_Data_merged.root
+    treename: O2topovars
+
+Output:
+    legLabels: ['Background X $\rightarrow$ $K^\pm$ $K^\mp$', 'Signal $\Phi$ $\rightarrow$ $K^\pm$ $K^\mp$']
+    dir: '/home/dmorris/ML-TagAndProbeDmesons/outputs/'
+    plotLabels: ['fTagsInvMass', 'fDecayLength', 'fDecayLengthXY', 'fDecayLengthNormalised', 'fTrackDcaXY', 'fCpa', 'fCpaXY']
+    dirPT: '/home/dmorris/ML-TagAndProbeDmesons/outputs/'
+dataPrep:
+    Signal: fIsSignal == 1
+    Bkg: fIsSignal == 0 
+    filt_bkg_TagsInvMass: fTagsInvMass < 1 or fTagsInvMass > 1.045
+    index: [0, 1]
+    test_fraction: 1.
+    DFfraction_mc_ml: 0.5 
+    DFfraction_data_ml: 0.05
+
+ml: 
+    indexClass: [0,1]
+    training_vars: ['fDecayLength', 'fDecayLengthXY', 'fDecayLengthNormalised', 'fTrackDcaXY', 'fCpa', 'fCpaXY']
+    modelHdl: /home/dmorris/ML-TagAndProbeDmesons/outputs/ModelHandler_model.pickle
+    modelOriginal: /home/dmorris/ML-TagAndProbeDmesons/outputs/XGBoos_model.pickle
+    modelonnx: /home/dmorris/ML-TagAndProbeDmesons/outputs/model_onnx.onnx
+
+    hyper_pars_pre_opt: {'max_depth':5, 'learning_rate':0.029, 'n_estimators':500, 'min_child_weight':2.7, 'subsample':0.90, 'colsample_bytree':0.97, 'n_jobs':1}
+    hyper_pars_ranges: {'max_depth': (2, 10), 'learning_rate':(0.01, 0.1), 'n_estimators':(200, 1500), 'min_child_weight':(2, 10), 'colsample_bytree':(0.1, 1.), 'n_jobs':(1,5)}
+    
+    #modify also in the mld utils
+    #toSaveCollumns_data: ['fTagsPt','fTagsInvMass','score']
+    toSaveCollumns_data: ['fTagsInvMass', 'fDecayLength', 'fDecayLengthXY', 'fDecayLengthNormalised', 'fTrackDcaXY', 'fCpa', 'fCpaXY', 'score']
+    toSaveCollumns_mc: ['fTagsInvMass', 'fDecayLength', 'fDecayLengthXY', 'fDecayLengthNormalised', 'fTrackDcaXY', 'fCpa', 'fCpaXY', 'fIsSignal', 'score']
+    #toSaveCollumns_mc:  ['fTagsPt','fTagsInvMass','fIsSignal','score']
+pyroot:
+    plotsDir: '/home/dmorris/ML-TagAndProbeDmesons/outputs/PyRootPlots/'
+
+
